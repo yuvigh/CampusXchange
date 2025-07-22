@@ -1,0 +1,133 @@
+<% layout("/layouts/boilerplate") %>
+<style>
+  #filters{
+    display:flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 1.2rem;
+  }
+  .filter{
+    text-align:center;
+    margin-right:2rem;
+   margin-top:1.7rem;
+    opacity:0.7;
+  }
+  .filter button{
+    border: none !important;/* Removes the border */
+    background: none; /* Removes any background color */
+    padding: 0; /* Adjusts padding to avoid any extra space */
+    cursor: pointer;
+  }
+  
+  .filter:hover{
+    opacity:1;
+    cursor:pointer;
+  }
+  .filter p{
+  font-size:0.8rem;
+  }
+  .taxInfo{
+    display:none;
+  }
+  .tax-toggle{
+    border: 1px solid black;
+    border-radius:1rem;
+    height:3.2rem;
+    padding:1rem;
+    margin-left:10rem;
+    display:flex;
+    align-items: center;
+  }
+</style>
+
+    <div>
+        
+      <div id="filters">
+        <div class="filter">
+          <div> <i class="fa-solid fa-fire"></i></div>
+                  <p>Trending</p>
+                  </div>
+                  <form method="GET" action="/clothes">
+                    <div class="filter clothes">
+                      <div><button><i class="fa-solid fa-shirt"></i></button></div>
+                      <p>Clothes</p>
+                      </div>
+                  </form>
+                  
+                  <div class="filter">
+                  <div><i class="fa-solid fa-shoe-prints"></i></i></div>
+                  <p>Shoes</p>
+                  </div>
+                <div class="filter">
+                  <div><i class="fa-solid fa-bicycle"></i></div>
+                  <p>Cycle</p>
+                  </div>
+                <div class="filter">
+                  <div><i class="fa-solid fa-laptop"></i></div>
+                  <p>Laptop</p>
+                  </div>
+                  <div class="filter">
+                    <div><i class="fa-solid fa-bucket"></i></div>
+                    <p>Bucket</p>
+                    </div>
+                    <div class="filter">
+                      <div><i class="fa-solid fa-book"></i></div>
+                      <p>Books</p>
+                      </div>
+                      <div class="filter">
+                        <div><i class="fa-solid fa-mobile"></i></div>
+                        <p>Phone</p>
+                        </div>
+                        <div class="filter">
+                          <div><i class="fa-solid fa-guitar"></i></div>
+                          <p>Guitar</p>
+                          </div>
+                          
+                        <div class="tax-toggle ms-auto">
+                          <div class="form-check-reverse form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                            <label class="form-check-label" for="flexSwitchCheckDefault">Include GST</label>
+                          </div>
+                        </div>
+                </div>
+        </div>
+      </div>
+    </div>
+    <!-- <h3>All Items</h3> -->
+    <!-- <form method="GET" action="/Item/new">
+        <button>Add New Item</button>
+    </form> -->
+    <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-1 ms-5">
+    <%for(item of Items){%>
+        <a href="/Items/<%=item._id%>" class="listing-link">
+    <div class="card" style="width: 18rem;">
+        <img src="<%= item.image %>" class="card-img-top" alt="Item_image" style="height:17rem">
+        <div class="card-img-overlay"></div>
+        <div class="card-body">
+          <p class="card-text">
+            <b><%=item.title%></b><br>
+            &#8377;<%=item.price.toLocaleString("en-IN")%>
+            <i class="taxInfo">&nbsp; +18% Gst</i>
+          </p>
+        </div>
+      </div>
+    </a>
+      <%}%>
+   
+    </div>
+</div>
+
+<script>
+  let taxSwitch = document.getElementById("flexSwitchCheckDefault");
+  taxSwitch.addEventListener("click",() => {
+    let taxInfo = document.getElementsByClassName("taxInfo");
+    for(info of taxInfo){
+      if( info.style.display != "inline"){
+      info.style.display = "inline";
+      }else{
+        info.style.display = "none";
+      }
+    }
+  })
+  </script>
+

@@ -1,0 +1,178 @@
+<% layout("/layouts/boilerplate") %>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="email"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .payment-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .actions {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 1.1rem;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #timer {
+            text-align: center;
+            font-size: 1.2rem;
+            color: red;
+            margin-bottom: 20px;
+        }
+    </style>
+<body>
+    <div class="container">
+        <h1>Payment Information</h1>
+        <p id="timer">
+            Time left to complete payment: <span id="time">60</span> seconds
+        </p>
+        <form action="/confirm-purchase/<%=item1._id%>" method="POST" novalidate  class="needs-validation">
+            <!-- Choose Payment Method -->
+            <div class="form-group">
+                <label for="paymentMethod">Select Payment Method:</label>
+                <select id="paymentMethod" name="paymentMethod" required>
+                    <option value="" disabled selected>Choose...</option>
+                    <option value="creditCard">Credit Card</option>
+                    <option value="upi">UPI</option>
+                    <option value="cod">Cash on Delivery</option>
+                </select>
+            </div>
+
+            <!-- Credit Card Details -->
+            <div id="creditCardDetails" class="hidden" class="form-control" required>
+                <div class="form-group" required>
+                    <label for="cardNumber">Credit Card Number:</label>
+                    <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9101 1121" maxlength="16">
+                </div>
+                <div class="form-group" class="form-control" required>
+                    <label for="expiryDate">Expiry Date:</label>
+                    <input type="text" id="expiryDate" name="expiryDate" placeholder="MM/YY">
+                </div>
+                <div class="form-group" class="form-control" required>
+                    <label for="cvv">CVV:</label>
+                    <input type="number" id="cvv" name="cvv" placeholder="123" maxlength="3">
+                </div>
+            </div>
+
+            <!-- UPI Details -->
+            <div id="upiDetails" class="hidden" class="form-control" required>
+                <div class="form-group">
+                    <label for="upiId">UPI ID:</label>
+                    <input type="text" id="upiId" name="upiId" placeholder="example@upi">
+                </div>
+            </div>
+
+            <!-- Cash on Delivery -->
+            <div id="codDetails" class="hidden">
+                <p>Cash on Delivery selected. No additional details required.</p>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="actions">
+                <button type="submit">Proceed to Pay</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Handle Payment Method Selection
+        const paymentMethod = document.getElementById('paymentMethod');
+        const creditCardDetails = document.getElementById('creditCardDetails');
+        const upiDetails = document.getElementById('upiDetails');
+        const codDetails = document.getElementById('codDetails');
+
+        paymentMethod.addEventListener('change', () => {
+            const selectedMethod = paymentMethod.value;
+
+            // Hide all payment details
+            creditCardDetails.classList.add('hidden');
+            upiDetails.classList.add('hidden');
+            codDetails.classList.add('hidden');
+
+            // Show selected payment method details
+            if (selectedMethod === 'creditCard') {
+                creditCardDetails.classList.remove('hidden');
+            } else if (selectedMethod === 'upi') {
+                upiDetails.classList.remove('hidden');
+            } else if (selectedMethod === 'cod') {
+                codDetails.classList.remove('hidden');
+            }
+        });
+
+        // Timer Functionality
+        let timeLeft = 60; // Set timer in seconds
+        const timerElement = document.getElementById("time");
+
+        const countdown = setInterval(() => {
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                alert("Time is up! Transaction has been canceled.");
+                window.location.href = "/Item"; // Redirect to homepage or timeout page
+            } else {
+                timerElement.textContent = timeLeft;
+                timeLeft--;
+            }
+        }, 1000); // Execute every 1 second
+    </script>
+

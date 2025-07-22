@@ -1,0 +1,93 @@
+<% layout("/layouts/boilerplate") %>
+    <div class="container">
+        <h1>Confirm Your Purchase</h1>
+        <div class="item-details">
+            <h2><%= item1.name %></h2>
+            <p><strong>Description:</strong> <%= item1.description %></p>
+            <p><strong>Price:</strong> ₹<%= item1.price %></p>
+        </div>
+
+        <p id="timer" style="text-align: center; font-size: 1.2rem; color: red;">
+            Time left to complete the purchase: <span id="time">30</span> seconds
+        </p>
+
+        <div class="actions">
+            <form action="/confirm-purchase/<%=item1._id%>" method="GET">
+                <input type="hidden" name="itemId" value="<%= item1._id %>">
+                <button type="submit" class="btn-confirm">Confirm Purchase</button>
+            </form>
+
+            <a href="/Item" class="btn-cancel">Cancel</a> <!-- Link back to the homepage -->
+        </div>
+    </div>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .item-details {
+            margin-bottom: 20px;
+        }
+        .actions {
+            display: flex;
+            justify-content: space-between;
+        }
+        .btn-confirm {
+            background-color: #28a745;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .btn-confirm:hover {
+            background-color: #218838;
+        }
+        .btn-cancel {
+            background-color: #dc3545;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .btn-cancel:hover {
+            background-color: #c82333;
+        }
+    </style>
+
+    <script>
+        let timeLeft = 30; // Set timer in seconds
+        const timerElement = document.getElementById("time");
+
+        const countdown = setInterval(() => {
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                // Redirect to cancel page or show a message
+                alert("Time is up! Transaction has been canceled.");
+                window.location.href = "/Item"; // Redirect to homepage or cancel route
+            } else {
+                timerElement.textContent = timeLeft;
+                timeLeft--;
+            }
+        }, 1000); // Decrease the timer every second
+    </script>
+
+
